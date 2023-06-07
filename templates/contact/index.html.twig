@@ -1,20 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ContactController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="row text-center">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/mihaela/Bureau/monProjet/src/Controller/ContactController.php'|file_link(0) }}">src/Controller/ContactController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/mihaela/Bureau/monProjet/templates/contact/index.html.twig'|file_link(0) }}">templates/contact/index.html.twig</a></code></li>
-    </ul>
+    {{ form_start(form) }}
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        <div class="col-9 mx-auto mb-2 mt-4">
+{#            {{ form_row(form.objet) }}#}
+            {{ form_label(form.objet, "Mon libellé a été modifié") }}
+            {{ form_widget(form.objet, {'attr': {'class': 'btn-light'} }) }}
+            {{ form_errors(form.objet) }}
+        </div>
+        <div class="col-9 mx-auto mb-2">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="col-9 mx-auto mb-2">
+            {{ form_row(form.message) }}
+        </div>
+
+    </div>
+    {{ form_end(form) }}
 </div>
 {% endblock %}
+
