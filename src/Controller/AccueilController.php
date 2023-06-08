@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccueilController extends AbstractController
 {
+
     //On va avoir souvent besoin d'injecter les respositories de nos entités dans les contrôleurs
     //Pour ne pas les injecter dans chaque fonction, on va les instancier une seule fois dans le constructeur de notre contrôleur;
     //On fait de même avec les autres services dont nous aurons besoin (EntityManager, Mailer etc.)
@@ -28,6 +29,9 @@ class AccueilController extends AbstractController
     #[Route('/accueil', name: 'app_accueil')]
     public function index(): Response
     {
+        $ats = $this->artistRepo->getSomeArtists("Neil");
+//        $ats = $this->artistRepo->getSomeArtists("Neil");
+        dd($ats);
         //afficher tous les artistes et tous leurs disques:
         //on appelle la fonction `findAll()` du repository de la classe Artist afin de récupérer tous les artists de la base de données;
         $artistes = $this->artistRepo->findAll();
