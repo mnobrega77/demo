@@ -27,7 +27,7 @@ class MailService
     public function sendMail($expediteur, $destinataire, $sujet, $message){
 
         //le code qui construit le mail
-        $email = (new Email())
+        $email = (new TemplatedEmail())
             ->from($expediteur)
             ->to($destinataire)
             //->cc('cc@example.com')
@@ -35,9 +35,13 @@ class MailService
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)
             ->subject($sujet)
-            ->text($message);
+            ->htmlTemplate('emails/contact_email.html.twig')
+            ->context([
+                'message' => $message,
+
+            ]);
         //...
 
-        $this->mailer->send();
+        $this->mailer->send($email);
     }
 }

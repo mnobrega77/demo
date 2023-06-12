@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Form\DemoFormType;
 use App\Form\ContactFormType;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, MailService $ms): Response
     {
         $form = $this->createForm(ContactFormType::class);
         $form->handleRequest($request);
@@ -35,28 +36,30 @@ class ContactController extends AbstractController
             $entityManager->persist($message);
             $entityManager->flush();
 
+            //use MailService
+            $email = $ms->sendMail('hello@example.com', $message->getEmail(), $message->getObjet(), $message->getMessage() );
 //            dd($message->getEmail());
 
             // Envoi de l'e-mail, sauvegarde en base de données, etc.
             // Envoi de l'e-mail, sauvegarde en base de données, etc.
-            $email = (new TemplatedEmail())
-                ->from('hello@example.com')
-                ->to($message->getEmail())
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject($message->getObjet())
-                ->htmlTemplate('emails/contact_email.html.twig')
-
-                // un tableau de variable à passer à la vue;
-                //  on choisit le nom d'une variable pour la vue et on lui attribue une valeur (comme dans la fonction `render`) :
-                ->context([
-                    'message' => $message->getMessage(),
-
-                ]);
-
-            $mailer->send($email);
+//            $email = (new TemplatedEmail())
+//                ->from('hello@example.com')
+//                ->to($message->getEmail())
+//                //->cc('cc@example.com')
+//                //->bcc('bcc@example.com')
+//                //->replyTo('fabien@example.com')
+//                //->priority(Email::PRIORITY_HIGH)
+//                ->subject($message->getObjet())
+//                ->htmlTemplate('emails/contact_email.html.twig')
+//
+//                // un tableau de variable à passer à la vue;
+//                //  on choisit le nom d'une variable pour la vue et on lui attribue une valeur (comme dans la fonction `render`) :
+//                ->context([
+//                    'message' => $message->getMessage(),
+//
+//                ]);
+//
+//            $mailer->send($email);
 
             // Redirection vers accueil
             return $this->redirectToRoute('app_accueil');
