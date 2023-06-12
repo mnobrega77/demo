@@ -6,6 +6,7 @@ use App\Entity\Contact;
 use App\Form\DemoFormType;
 use App\Form\ContactFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -27,24 +28,33 @@ class ContactController extends AbstractController
             $message = new Contact();
             // Traitement des données du formulaire
             $data = $form->getData();
+
             //on stocke les données récupérées dans la variable $message
             $message = $data;
 
             $entityManager->persist($message);
             $entityManager->flush();
 
+//            dd($message->getEmail());
+
             // Envoi de l'e-mail, sauvegarde en base de données, etc.
             // Envoi de l'e-mail, sauvegarde en base de données, etc.
-            $email = (new Email())
+            $email = (new TemplatedEmail())
                 ->from('hello@example.com')
-                ->to('you@example.com')
+                ->to($message->getEmail())
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
-                ->subject('Time for Symfony Mailer!')
-                ->text('Sending emails is fun again!')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
+                ->subject($message->getObjet())
+                ->htmlTemplate('emails/contact_email.html.twig')
+
+                // un tableau de variable à passer à la vue;
+                //  on choisit le nom d'une variable pour la vue et on lui attribue une valeur (comme dans la fonction `render`) :
+                ->context([
+                    'message' => $message->getMessage(),
+
+                ]);
 
             $mailer->send($email);
 

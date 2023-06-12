@@ -15,10 +15,12 @@ class MailService
 {
     //On injecte dans le constructeur les dépendances dont on a besoin, comme le MailerInterface
 
-    public function __construct(
-        private MailerInterface $mailer,
-        private RequestStack $requestStack
-)
+    private $mailer;
+    private $requestStack;
+    public function __construct(MailerInterface $mailer, RequestStack $requestStack){
+        $this->mailer = $mailer;
+        $this->requestStack = $requestStack;
+    }
 
 
     //on écrit notre fonction sendMail()
