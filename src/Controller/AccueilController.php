@@ -31,7 +31,7 @@ class AccueilController extends AbstractController
     {
         $ats = $this->artistRepo->getSomeArtists("Neil");
 //        $ats = $this->artistRepo->getSomeArtists("Neil");
-        dd($ats);
+//        dd($ats);
         //afficher tous les artistes et tous leurs disques:
         //on appelle la fonction `findAll()` du repository de la classe Artist afin de récupérer tous les artists de la base de données;
         $artistes = $this->artistRepo->findAll();
