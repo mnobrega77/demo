@@ -29,7 +29,7 @@ class MailService
 
         $dossiers_images = $this->paramBag->get('images_directory');
 
-        dd($dossiers_images);
+//        dd($dossiers_images);
 
 
         //le code qui construit le mail
