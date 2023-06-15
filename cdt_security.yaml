@@ -1,0 +1,101 @@
+security:
+    enable_authenticator_manager: true
+
+    password_hashers:
+        # Use native password hasher, which auto-selects and migrates the best
+        # possible hashing algorithm (which currently is "bcrypt")
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        login:
+            pattern: ^/bestt/login
+            stateless: true
+            json_login:
+                check_path: /bestt/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        connexion_bestt:
+            provider: app_user_provider
+            pattern:  ^/bestt
+            jwt: ~
+#        api:
+#            provider: app_user_provider
+#            entry_point: App\Security\AuthenticationEntryPoint
+#            pattern :  ^/api
+#            stateless : true
+#            guard:
+#                authenticators :
+#                    -  lexik_jwt_authentication.jwt_token_authenticator
+#
+#            jwt: ~
+#            json_login:
+#                # username_path: email
+#                check_path : /api/login_check
+#                success_handler : lexik_jwt_authentication.handler.authentication_success
+#                failure_handler : lexik_jwt_authentication.handler.authentication_failure
+#            refresh_jwt:
+#                check_path: /api/token/refresh # or, you may use the `api_refresh_token` route name
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            entry_point: App\Security\AuthenticationEntryPoint
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: login_success
+                failure_path: app_login
+                enable_csrf: true
+                remember_me: true
+#                csrf_token_generator: security.csrf.token_manager
+
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
+                - App\Security\GoogleAuthenticator
+                - App\Security\LinkedinAuthenticator
+                - App\Security\FacebookAuthenticator
+
+            # by default, the feature allows 5 login attempts per minute
+            login_throttling: ~
+            remember_me:
+                secret: '%kernel.secret%'
+                name: REMEMBERME
+                lifetime: 86400 # 1 day in seconds
+                httponly: true
+                path: /
+                remember_me_parameter: _remember_me
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
+            user_checker: App\Security\UserChecker
+
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: '%env(SECURE_SCHEME)%' }
+#        - { path: ^/api, roles: [ROLE_USER], requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/login_success, allow_if: "is_authenticated()", requires_channel: '%env(SECURE_SCHEME)%'}
+        - { path: ^/candidat/inscription, roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/candidat, roles: [ROLE_CANDIDAT, ROLE_ADMIN], requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/entreprise/inscription, roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/entreprise/dashboard, roles: [ROLE_RECRUTEUR, ROLE_ADMIN], requires_channel: '%env(SECURE_SCHEME)%' }
+        - { path: ^/entreprise/offre_creation, roles: [ROLE_RECRUTEUR, ROLE_ADMIN], requires_channel: '%env(SECURE_SCHEME)%' }
+
