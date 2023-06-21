@@ -14,12 +14,19 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ContactController extends AbstractController
 {
+    #[isGranted('ROLE_CLIENT', message: "Nous sommes désolés, vous ne disposez pas des autorisations nécessaires pour accèder à cette page!")]
     #[Route('/contact', name: 'app_contact')]
+
     public function index(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, MailService $ms): Response
     {
+        //on restrictionne l'accès ICI :
+//        $this->denyAccessUnlessGranted('ROLE_CLIENT');
+
+
         $form = $this->createForm(ContactFormType::class);
         $form->handleRequest($request);
 

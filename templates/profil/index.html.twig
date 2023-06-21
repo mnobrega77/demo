@@ -13,6 +13,7 @@
 {#                        <th>Prénom</th>#}
 {#                        <th>Date de naissance</th>#}
                         <th>Email</th>
+                        <th colspan="2">Rôles</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -21,6 +22,10 @@
 {#                        <td>{{ informations.firstname }}</td>#}
 {#                        <td>{{ informations.birthdate }}</td>#}
                         <td>{{ informations.email }}</td>
+{#                        Les rôles sont un tableau, il nous faire une boucle :#}
+                        {% for role in informations.roles %}
+                        <td>{{ role }}</td>
+                        {% endfor %}
                     </tr>
                     </tbody>
                 </table>
