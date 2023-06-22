@@ -151,7 +151,6 @@
       <path value="$PROJECT_DIR$/vendor/api-platform/api-pack" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
