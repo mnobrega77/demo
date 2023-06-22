@@ -3,21 +3,17 @@ api_platform:
     type: api_platform
     prefix: /api
 
-#    formats:
-#        json:
-#            mime_types: [ 'application/json' ]
+    format:
+        json
+
+#        json: [ 'application/json' ]
 #
-#        jsonld:
-#            mime_types: [ 'application/ld+json' ]
+#        jsonld: [ 'application/ld+json' ]
 #
-#        html:
-#            mime_types: [ 'text/html' ]
+#        html: [ 'text/html' ]
 #
-#        xml:
-#            mime_types: [ 'application/xml', 'text/xml' ]
+#        xml: [ 'application/xml', 'text/xml' ]
 #
-#        yaml:
-#            mime_types: [ 'application/x-yaml' ]
+#        yaml: [ 'application/x-yaml' ]
 #
-#        csv:
-#            mime_types: [ 'text/csv' ]
+#        csv: [ 'text/csv' ]
