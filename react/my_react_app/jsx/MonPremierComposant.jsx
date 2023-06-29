@@ -28,48 +28,32 @@ const MonPremierComposant = (props) => {
     }, []);
 
 
-    //construit tous les items du caroussel d'articles
-    const getCarouselItems = () => {
-        if(loading){
-            return(
-                <Carousel.Item className="w-100 h-100 imgContainer">
-                    <div className="loadingElm w-100 loadingImage"></div>
-                </Carousel.Item>
-            );
-        }
-        else{
-            return (
-                users && users.map((item, index)=> (
-                    <Carousel.Item className="w-100 h-100 imgContainer" key={index}>
-                        <img
-                            className="carouselImage"
-                            src={item.avatar}
-                            alt={"image-article" + item.email}
-                            style={{maxWidth: "100%"}}
-                        />
-                        <Carousel.Caption>
-                            <h4 className="text-white rounded"
-                                style={{backgroundColor: "rgba(150,150,150,0.6)", textShadow: "2px 2px 4px #000000"}}>
-                                <>{item.first_name} {item.last_name}</>
-                            </h4>
-                        </Carousel.Caption>
-                    </Carousel.Item>)
-                )
-            );
-        }
-    }
-
-
     return (
-        <>
-            <div className="actus-container">
-                <Carousel activeIndex={index} onSelect={handleSelect} className="carousel-container">
-                    {getCarouselItems()}
-                </Carousel>
+        <div className={"container"}>
+            <Carousel activeIndex={index} onSelect={handleSelect} className={"mt-5"}>
+                {
+                    users && users.map((item, index)=> (
+                        <Carousel.Item className="w-100" key={index}>
+                            <img
+                                className="carouselImage"
+                                src={item.avatar}
+                                alt={"image-article"}
+                                style={{height: "240px"}}
+                            />
+                            <Carousel.Caption>
+                                <span className="text-white rounded">
+                                    <h2 style={{color: "#4169E1", fontSize: "2.5em", textShadow: "2px 2px 4px #4169E1"}}>{item.first_name} {item.last_name}</h2>
+                                    <p style={{color: "#4169E1", fontSize: "2em"}}>{item.email}</p>
+                                </span>
+                            </Carousel.Caption>
+                        </Carousel.Item>)
+                    )
+                }
 
-            </div>
-        </>
+            </Carousel>
+        </div>
     );
+
 }
 
 export default MonPremierComposant
